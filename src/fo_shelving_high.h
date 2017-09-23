@@ -1,5 +1,5 @@
 /**
-* First order low-shelving filter
+* First order high-shelving filter
 * Dimitris Tassopoulos 2016
 *
 * fc , high shelf frequency

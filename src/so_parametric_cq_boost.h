@@ -1,5 +1,5 @@
 /**
-* Second order parametric/peaking filter with non-constant-Q
+* Second order parametric/peaking boost filter with constant-Q
 * Dimitris Tassopoulos 2016
 *
 * fc , center frequency
