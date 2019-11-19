@@ -24,11 +24,11 @@ F_SIZE SO_LINKWITZ_RILEY_BPF::filter(F_SIZE sample)
 {
 	F_SIZE xn = sample;
 	F_SIZE yn = m_coeffs.a0*xn + m_coeffs.a1*m_xnz1 + m_coeffs.a2*m_xnz2
-		- m_coeffs.b1*m_ynz1 - m_coeffs.b2*m_xnz2;
+		- m_coeffs.b1*m_ynz1 - m_coeffs.b2*m_ynz2;
 
 	m_xnz2 = m_xnz1;
 	m_xnz1 = xn;
-	m_xnz2 = m_ynz1;
+	m_ynz2 = m_ynz1;
 	m_ynz1 = yn;
 
 	return(yn);

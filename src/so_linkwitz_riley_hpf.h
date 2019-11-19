@@ -19,6 +19,6 @@ public:
 	F_SIZE filter(F_SIZE sample);
 
 private:
-	F_SIZE m_xnz1, m_xnz2, m_ynz1, m_ynz2;
+	F_SIZE m_xnz1 = 0, m_xnz2 = 0, m_ynz1 = 0, m_ynz2 = 0;
 	tp_coeffs m_coeffs;
 };
