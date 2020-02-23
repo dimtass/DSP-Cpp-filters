@@ -1,6 +1,6 @@
 /**
 * Second order parametric/peaking filter with non-constant-Q
-* Dimitris Tassopoulos 2016
+* Dimitris Tassopoulos 2016-2020
 *
 * fc , center frequency
 * Q quality factor
@@ -20,14 +20,22 @@
 #pragma once
 #include "filter_common.h"
 
-class SO_PARAMETRIC_NCQ {
+class SO_PARAMETRIC_NCQ : public Biquad {
 public:
-	SO_PARAMETRIC_NCQ();
-	virtual ~SO_PARAMETRIC_NCQ();
-	tp_coeffs calculate_coeffs(float gain_db, float Q, int fc, int fs = 44100);
-	F_SIZE filter(F_SIZE sample);
-
-private:
-	F_SIZE m_xnz1, m_xnz2, m_ynz1, m_ynz2;
-	tp_coeffs m_coeffs;
+    tp_coeffs& calculate_coeffs(float gain_db, float Q, int fc, int fs)
+    {
+        coef_size_t w = 2.0 * pi * fc / fs;
+        coef_size_t m = pow(10.0, gain_db / 20.0);
+        coef_size_t z = 4.0 / (1.0 + m);
+        coef_size_t b = 0.5 * ((1.0 - z*tan(w / (2.0*Q)) / (1 + z*tan(w / (2.0*Q)))));
+        coef_size_t g = (0.5 + b) * cos(w);
+        m_coeffs.a0 = 0.5 - b;
+        m_coeffs.a1 = 0.0;
+        m_coeffs.a2 = -(0.5 - b);
+        m_coeffs.b1 = -2.0*g;
+        m_coeffs.b2 = 2.0 * b;
+        m_coeffs.c0 = m - 1.0;
+        m_coeffs.d0 = 1.0;
+		return(std::ref(m_coeffs));
+    }
 };

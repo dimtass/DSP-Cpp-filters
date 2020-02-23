@@ -1,19 +1,21 @@
 /**
 * First order high-pass filter
-* Dimitris Tassopoulos 2016
+* Dimitris Tassopoulos 2016-2020
 */
 #pragma once
 #include "filter_common.h"
 
-class FO_HPF {
+class FO_HPF : public Biquad {
 public:
-
-	FO_HPF();
-	virtual ~FO_HPF();
-	tp_coeffs calculate_coeffs(int fc, int fs = 44100);
-	F_SIZE filter(F_SIZE sample);
-
-private:
-	F_SIZE m_xnz1, m_xnz2, m_ynz1, m_ynz2;
-	tp_coeffs m_coeffs;
+    tp_coeffs& calculate_coeffs(int fc, int fs)
+    {
+        coef_size_t th = 2.0 * pi * fc / fs;
+        coef_size_t g = cos(th) / (1.0 + sin(th));
+        m_coeffs.a0 = (1.0 + g) / 2.0;
+        m_coeffs.a1 = -((1.0 + g) / 2.0);
+        m_coeffs.a2 = 0.0;
+        m_coeffs.b1 = -g;
+        m_coeffs.b2 = 0.0;
+        return(std::ref(m_coeffs));
+    }
 };

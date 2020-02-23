@@ -1,6 +1,6 @@
 /**
 * Second order parametric/peaking boost filter with constant-Q
-* Dimitris Tassopoulos 2016
+* Dimitris Tassopoulos 2016-2020
 *
 * fc , center frequency
 * Q quality factor
@@ -20,14 +20,24 @@
 #pragma once
 #include "filter_common.h"
 
-class SO_PARAMETRIC_CQ_BOOST {
+class SO_PARAMETRIC_CQ_BOOST : public Biquad {
 public:
-	SO_PARAMETRIC_CQ_BOOST();
-	virtual ~SO_PARAMETRIC_CQ_BOOST();
-	tp_coeffs calculate_coeffs(float gain_db, float Q, int fc, int fs = 44100);
-	F_SIZE filter(F_SIZE sample);
-
-private:
-	F_SIZE m_xnz1, m_xnz2, m_ynz1, m_ynz2;
-	tp_coeffs m_coeffs;
+    tp_coeffs& calculate_coeffs(float gain_db, float Q, int fc, int fs)
+    {
+        coef_size_t K = 2.0 * pi * fc / fs;
+        coef_size_t V0 = pow(10.0, gain_db / 20.0);
+        coef_size_t d0 = 1.0 + K/Q + pow(K, 2.0);
+        coef_size_t a = 1.0 + (V0*K)/Q + pow(K, 2.0);
+        coef_size_t b = 2.0*(pow(K, 2.0) - 1.0);
+        coef_size_t g = 1.0 - (V0*K)/Q + pow(K, 2.0);
+        coef_size_t d = 1.0 - K/Q + pow(K, 2.0);
+        m_coeffs.a0 = a/d0;
+        m_coeffs.a1 = b/d0;
+        m_coeffs.a2 = g/d0;
+        m_coeffs.b1 = b/d0;
+        m_coeffs.b2 = d/d0;
+        m_coeffs.c0 = 1.0;
+        m_coeffs.d0 = 0.0;
+        return(std::ref(m_coeffs));
+    }
 };
