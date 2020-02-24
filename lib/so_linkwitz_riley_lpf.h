@@ -11,7 +11,7 @@
 #pragma once
 #include "filter_common.h"
 
-class SO_LINKWITZ_RILEY_BPF : public Biquad {
+class SO_LINKWITZ_RILEY_LPF : public Biquad {
 public:
     tp_coeffs& calculate_coeffs(int fc, int fs)
     {

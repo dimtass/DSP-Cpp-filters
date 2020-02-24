@@ -114,3 +114,6 @@ dkms.conf
 
 # Visual Studio Code project file
 *.vscode
+
+build/
+git-multi
