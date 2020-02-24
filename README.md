@@ -1,6 +1,8 @@
 DSP filters in C++
 ----
 
+[![dimtass](https://circleci.com/gh/dimtass/DSP-Cpp-filters.svg?style=svg)](https://circleci.com/gh/dimtass/DSP-Cpp-filters)
+
 This repo contains some DSP biquad filters used in audio. I've extracted those
 filters from the `Designing Audio Effect Plug-Ins in C++: With Digital Audio Signal Processing Theory`
 book that you can find [here](https://www.amazon.com/Designing-Audio-Effect-Plug-Ins-Processing/dp/0240825152).
