@@ -36,6 +36,10 @@ y(n) = a0*x(n) + a1*x(n-1) + a2*x(n-2) - b*y(n-1) + b2*y(n-2)
 - Second order parametric/peaking cut filter with constant-Q (so_parametric_cq_cut)
 - Second order parametric/peaking filter with non-constant-Q (so_parametric_ncq)
 
+All the filters are now header files and they are located in the `lib/` folder.
+In order to use them just copy the `lib/` folder (and rename it if needed) into
+your project folder. There's an example how to build later in the README.
+
 ## Build & run tests
 You can use cmake to build the tests. On Linux, you can just run this:
 ```sh
@@ -53,29 +57,60 @@ The filters can be used in your C++ code in the part where the audio sample is a
 I've used [RackAFX](http://www.willpirkle.com/rackafx/) to test these filters.
 
 ## Code example
-To use the so-LPF filter add this in to your main.cpp file
+For example, to use the so-LPF filter then first create a `main.cpp` file
+in the top directory of this repo.
+
+```sh
+touch main.cpp
+```
+
+Then add this code inside:
 
 ```cpp
+#include <iostream>
+#include <memory>
 #include "filter_common.h"
 #include "filter_includes.h"
 
 int main() {
-	std::unique_ptr<SO_LPF> filter (new SO_LPF);
+    std::unique_ptr<SO_LPF> filter (new SO_LPF);
 
-	auto coeffs = filter->calculate_coeffs(5000, 96000);
-	auto yn = filter->process(0.303);
+    auto coeffs = filter->calculate_coeffs(1.0, 5000, 96000);
+    auto yn = filter->process(0.303);
 
-	std::cout << "Coeffs: " << std::endl;
-	std::cout << "a0: " << coeffs.a0 << std::endl;
-	std::cout << "a1: " << coeffs.a1 << std::endl;
-	std::cout << "a2: " << coeffs.a2 << std::endl;
-	std::cout << "b1: " << coeffs.b1 << std::endl;
-	std::cout << "b2: " << coeffs.b2 << std::endl;
+    std::cout << "Coeffs: " << std::endl;
+    std::cout << "a0: " << coeffs.a0 << std::endl;
+    std::cout << "a1: " << coeffs.a1 << std::endl;
+    std::cout << "a2: " << coeffs.a2 << std::endl;
+    std::cout << "b1: " << coeffs.b1 << std::endl;
+    std::cout << "b2: " << coeffs.b2 << std::endl;
 
-	std::cout << "yn: " << yn << std::endl;
-	return 0;
+    std::cout << "yn: " << yn << std::endl;
+    return 0;
+}
 }
 ```
 
+Now to build the file run:
+```sh
+g++ main.cpp -I./lib
+```
+
+And then run the executable:
+```sh
+./a.out
+```
+
 This is will print the filter coefficients and then will process
-a sample with the value `0.303`
+a sample with the value `0.303`. You should see an output similar
+to this:
+
+```
+Coeffs: 
+a0: 0.0228608
+a1: 0.0457215
+a2: 0.0228608
+b1: -1.63163
+b2: 0.723069
+yn: 0.00692681
+```
