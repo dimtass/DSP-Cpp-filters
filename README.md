@@ -88,7 +88,6 @@ int main() {
     std::cout << "yn: " << yn << std::endl;
     return 0;
 }
-}
 ```
 
 Now to build the file run:
