@@ -16,7 +16,7 @@ public:
     typedef float coef_size_t;
 #endif
 
-    Biquad() : m_xnz1(0), m_xnz2(0), m_ynz1(0), m_ynz2(0), m_coeffs{0} {};
+    Biquad() : m_xnz1(0), m_xnz2(0), m_ynz1(0), m_ynz2(0), m_offset(0), m_coeffs{0} {};
     virtual ~Biquad() {};
     coef_size_t process(coef_size_t sample)
     {
@@ -27,8 +27,18 @@ public:
     	m_xnz1 = xn;
     	m_ynz2 = m_ynz1;
     	m_ynz1 = yn;    
-    	return(yn);
+    	return(yn + m_offset);
     }
+
+	void set_offset(coef_size_t offset)
+	{
+		m_offset = offset;
+	}
+
+	coef_size_t get_offset(void)
+	{
+		return(m_offset);
+	}
 
     typedef struct {
     	coef_size_t a0;
@@ -41,6 +51,6 @@ public:
     } tp_coeffs;
 
 protected:
-    coef_size_t m_xnz1, m_xnz2, m_ynz1, m_ynz2;
+    coef_size_t m_xnz1, m_xnz2, m_ynz1, m_ynz2, m_offset;
     tp_coeffs m_coeffs;
 };
