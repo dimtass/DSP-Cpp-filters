@@ -7,8 +7,7 @@ This repo contains some DSP biquad filters used in audio. I've extracted those
 filters from the `Designing Audio Effect Plug-Ins in C++: With Digital Audio Signal Processing Theory`
 book that you can find [here](https://www.amazon.com/Designing-Audio-Effect-Plug-Ins-Processing/dp/0240825152).
 
-Not all those filters are tested, but I think that the high-pass filters don't work
-very well.
+I've also implemented a real-time testing on a Cortex-M4 MCU, using the on-chip ADC and DAC. You can find the post [here](https://github.com/dimtass/DSP-Cpp-filters).
 
 This is the formula I'm using for the [digital biquad filter](https://en.wikipedia.org/wiki/Digital_biquad_filter)
 in the source code:
