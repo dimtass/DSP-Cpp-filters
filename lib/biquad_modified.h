@@ -12,7 +12,7 @@ public:
 
         m_xnz2 = m_xnz1;
         m_xnz1 = xn;
-        m_xnz2 = m_ynz1;
+        m_ynz2 = m_ynz1;
         m_ynz1 = yn;
     	return(yn);
     }
