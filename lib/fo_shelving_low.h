@@ -16,7 +16,7 @@ class FO_SHELVING_LOW : public BiquadModified {
 public:
 	tp_coeffs& calculate_coeffs(float gain_db, int fc, int fs)
 	{
-		coef_size_t th = 2.0 * pi * fc / fs;
+		coef_size_t th = 2.0 * dcf_pi * fc / fs;
 		coef_size_t m = pow(10.0, gain_db / 20.0);
 		coef_size_t b = 4.0 / (1.0 + m);
 		coef_size_t d = b * tan(th / 2.0);

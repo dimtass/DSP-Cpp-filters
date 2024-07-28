@@ -24,7 +24,7 @@ class SO_PARAMETRIC_CQ_CUT : public Biquad {
 public:
     tp_coeffs calculate_coeffs(float gain_db, float Q, int fc, int fs)
 	{
-        coef_size_t K = 2.0 * pi * fc / fs;
+        coef_size_t K = 2.0 * dcf_pi * fc / fs;
         coef_size_t V0 = pow(10.0, gain_db / 20.0);
         coef_size_t d0 = 1.0 + K / Q + pow(K, 2.0);
         coef_size_t e = 1.0 + K / (V0*Q) + pow(K, 2.0);
