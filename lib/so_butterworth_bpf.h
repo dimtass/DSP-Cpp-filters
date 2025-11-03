@@ -14,8 +14,8 @@ class SO_BUTTERWORTH_BPF : public Biquad {
 public:
     tp_coeffs& calculate_coeffs(float bw, int fc, int fs)
     {
-        coef_size_t c = 1.0 / (tan(pi*fc*bw / fs));
-        coef_size_t d = 2.0 * cos(2.0 * pi * fc / fs);
+        coef_size_t c = 1.0 / (tan(dcf_pi*fc*bw / fs));
+        coef_size_t d = 2.0 * cos(2.0 * dcf_pi * fc / fs);
         m_coeffs.a0 = 1.0 / (1.0 + c);
         m_coeffs.a1 = 0.0;
         m_coeffs.a2 = - m_coeffs.a0;

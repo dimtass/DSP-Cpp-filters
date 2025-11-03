@@ -12,7 +12,7 @@ class SO_HPF : public Biquad {
 public:
     tp_coeffs& calculate_coeffs(float Q, int fc, int fs)
     {
-        coef_size_t w = 2.0 * pi * fc / fs;
+        coef_size_t w = 2.0 * dcf_pi * fc / fs;
         coef_size_t d = 1.0 / Q;
         coef_size_t b = 0.5*(1.0 - (d / 2)*sin(w)) / (1.0 + (d / 2.0)*sin(w));
         coef_size_t g = (0.5 + b)*cos(w);

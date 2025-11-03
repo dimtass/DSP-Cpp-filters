@@ -24,7 +24,7 @@ class SO_PARAMETRIC_NCQ : public Biquad {
 public:
     tp_coeffs& calculate_coeffs(float gain_db, float Q, int fc, int fs)
     {
-        coef_size_t w = 2.0 * pi * fc / fs;
+        coef_size_t w = 2.0 * dcf_pi * fc / fs;
         coef_size_t m = pow(10.0, gain_db / 20.0);
         coef_size_t z = 4.0 / (1.0 + m);
         coef_size_t b = 0.5 * ((1.0 - z*tan(w / (2.0*Q)) / (1 + z*tan(w / (2.0*Q)))));
