@@ -1,0 +1,32 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake g++
+
+    - name: Build and run tests
+      run: ./build-tests.sh
+
+    - name: Test Summary
+      if: always()
+      run: |
+        if [ -d build ]; then
+          echo "Build completed successfully"
+          echo "Test results:"
+          find build -name "*.log" -type f -exec cat {} \; 2>/dev/null || echo "No test logs found"
+        fi
