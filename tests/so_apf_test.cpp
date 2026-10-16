@@ -6,14 +6,15 @@ struct so_apf : public testing::Test {
 	Biquad::tp_coeffs m_coeffs;
 	void SetUp() {
 		m_filter = new SO_APF();
-		m_coeffs = m_filter->calculate_coeffs(FC, SAMPLING_RATE);
+		m_coeffs = m_filter->calculate_coeffs(FC, FC, SAMPLING_RATE);
 	}
 	void TearDown() { delete m_filter; }
 };
 
 TEST_F(so_apf, coeff_calculation) {
 	// Assert
-	EXPECT_NEAR(m_coeffs.a0, 0.71659, 0.00001);
+	EXPECT_NEAR(m_coeffs.a0, 0.71658987, 0.00000001);
+	EXPECT_NEAR(m_coeffs.b1, -1.62549066, 0.000001);
 #ifdef DEBUG_OUTPUT
 	debug_print(m_coeffs);
 #endif
