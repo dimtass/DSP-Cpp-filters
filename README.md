@@ -12,7 +12,7 @@ I've also implemented a real-time testing on a Cortex-M4 MCU, using the on-chip 
 This is the formula I'm using for the [digital biquad filter](https://en.wikipedia.org/wiki/Digital_biquad_filter)
 in the source code:
 ```
-y(n) = a0*x(n) + a1*x(n-1) + a2*x(n-2) - b*y(n-1) + b2*y(n-2)
+y(n) = a0*x(n) + a1*x(n-1) + a2*x(n-2) - b1*y(n-1) - b2*y(n-2)
 ```
 
 - First order all-pass filter (fo_apf)
@@ -45,13 +45,44 @@ You can use cmake to build the tests. On Linux, you can just run this:
 ./build-tests.sh
 ```
 
-The above command will build the tests and run them.
+The above command will build the tests and run them. Alternatively, on Linux or
+macOS, use an out-of-source build:
 
-> Note: Tests are a bit naive in this case, since it doesn't make
-much sense for testing using unit-tests, but anyways, I've added them
+```sh
+cmake -S . -B build -DBUILD_UNIT_TESTS=ON
+cmake --build build --parallel 2
+ctest --test-dir build --output-on-failure
+```
+
+The tests compare all 19 filters with independent first-edition coefficient
+oracles and multi-sample impulse responses. Additional checks cover stability,
+center-frequency gain/phase, zero-dB bypass, crossover polarity and consistent
+header inclusion in default, double and float precision. Tests require C++14
+for GoogleTest; the filter headers remain usable with C++11.
+
+## Precision and parameter conventions
+
+Double precision is the default, independent of header include order. Define
+`COEFF_SIZE_FLOAT` before including any library header (or in compiler flags)
+to opt into float. Do not define both precision macros, and use the same
+selection in every translation unit. Rebuild all consumers after changing it.
+Very narrow filters and poles close to the unit circle are more sensitive to
+single-precision rounding.
+
+Inputs must satisfy the documented frequency, bandwidth and Q preconditions;
+the coefficient APIs do not clamp or reject invalid inputs. In particular,
+`SO_BPF`, `SO_BSF` and `SO_PARAMETRIC_NCQ` require `fc/Q < fs/2`.
+`SO_APF` preserves the first edition's width-like `Q` control in
+`tan(pi*Q/fs)`; it is not the later edition's conventional `fc/Q` convention.
+For a second-order Linkwitz-Riley crossover, invert one branch before adding
+it to the other (`LPF - HPF`) to obtain a flat electrical magnitude response.
+
+See [filter validation and source references](docs/filter-validation.md) for
+all parameter domains, the equation map, corrected errata, behavior changes
+and validation limits.
 
 ## Usage:
-The filters can be used in your C++ code in the part where the audio sample is about to be processed. You need to include the _filter_common.h_ and _filter_includes.h_ files and the create an object with filter(s) you want to apply and calculate the coefficients with the calculate_coeffs() function. Then in the sample processing function run the filter() function with the current sample as a parameter.
+The filters can be used in your C++ code in the part where the audio sample is about to be processed. You need to include the _filter_common.h_ and _filter_includes.h_ files and the create an object with filter(s) you want to apply and calculate the coefficients with the calculate_coeffs() function. Then in the sample processing function call the concrete filter's process() function with the current sample as a parameter.
 
 I've used [RackAFX](http://www.willpirkle.com/rackafx/) to test these filters.
 

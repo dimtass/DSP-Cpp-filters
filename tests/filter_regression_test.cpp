@@ -253,4 +253,29 @@ TEST(FilterResponseRegression, LinkwitzRileyNeedsOppositePolarity) {
     }
 }
 
+TEST(FilterResponseRegression, PeakingControlsVaryIndependently) {
+    for (int fs : {48000, 96000}) for (int fc : {1000, 5000}) {
+        for (float q : {0.5f, 1.0f, 2.0f, 8.0f}) {
+            for (float gain : {-12.0f, -6.0f, 0.0f, 6.0f, 12.0f}) {
+                SCOPED_TRACE(testing::Message() << "fs=" << fs << " fc=" << fc
+                             << " Q=" << q << " gain=" << gain);
+                compare_with_source<SO_PARAMETRIC_CQ_BOOST>(16,
+                    reference(16, q, gain, 0, fc, fs), gain, q, fc, fs);
+                compare_with_source<SO_PARAMETRIC_CQ_CUT>(17,
+                    reference(17, q, gain, 0, fc, fs), gain, q, fc, fs);
+                compare_with_source<SO_PARAMETRIC_NCQ>(18,
+                    reference(18, q, gain, 0, fc, fs), gain, q, fc, fs);
+            }
+        }
+    }
+}
+
+TEST(FilterResponseRegression, LowFrequencyAllPassCenterPhase) {
+    SO_APF filter;
+    const auto c = coefficients(filter.calculate_coeffs(500, 100, 96000));
+    // Use a finite width with margin for float cancellation near DC. This is
+    // not a guarantee for arbitrarily narrow, near-unit-pole float settings.
+    EXPECT_LT(std::abs(response(c, 2*pi*100/96000, false)+1.0), response_tolerance);
+}
+
 } // namespace
