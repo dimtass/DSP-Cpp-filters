@@ -5,7 +5,7 @@
 * fc, corner frequency
 */
 #pragma once
-#include "filter_common.h"
+#include "filter_config.h"
 
 class Biquad {
 public:
