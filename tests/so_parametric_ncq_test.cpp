@@ -13,7 +13,8 @@ struct so_parametric_ncq : public testing::Test {
 
 TEST_F(so_parametric_ncq, coeff_calculation) {
 	// Assert
-	EXPECT_NEAR(m_coeffs.a0, 0.118674, 0.00001);
+	// Eq. 6.42: the entire beta numerator is divided by its denominator.
+	EXPECT_NEAR(m_coeffs.a0, 0.2373482095659755, 0.00001);
 #ifdef DEBUG_OUTPUT
 	debug_print(m_coeffs);
 #endif
@@ -33,7 +34,8 @@ TEST_F(so_parametric_ncq, process_1) {
 	// Act
 	auto yn = m_filter->process(TEST_SAMPLE_1);
 	// Assert
-	EXPECT_NEAR(yn, 0.118674, 0.00001);
+	// With zero state, y[0] = d0 + c0*a0, not just the internal a0.
+	EXPECT_NEAR(yn, 1.0289608616625787, 0.00001);
 #ifdef DEBUG_OUTPUT
 	std::cout << "yn: " << yn << std::endl;
 #endif
