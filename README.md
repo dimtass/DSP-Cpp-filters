@@ -42,7 +42,7 @@ your project folder. There's an example how to build later in the README.
 ## Build & run tests
 You can use cmake to build the tests. On Linux, you can just run this:
 ```sh
-./build_tests.sh
+./build-tests.sh
 ```
 
 The above command will build the tests and run them.
