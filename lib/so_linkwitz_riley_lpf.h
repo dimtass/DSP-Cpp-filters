@@ -4,9 +4,9 @@
 *
 * fc , corner frequency (-6 dB)
 * Second-order Linkwitz/Riley LPFs are designed to have an attenuation of -6 dB
-* at the corner frequency rather than the standard -3 dB When these
-* filters are placed in parallel with the same cutoff frequency, their outputs sum exactly and
-* the resulting response is flat. They are often used in crossovers.
+* at the corner frequency rather than the standard -3 dB. A matching LPF/HPF
+* pair needs one branch polarity inverted for a flat electrical sum (LPF - HPF).
+* Direct same-polarity summation cancels at fc. Used in second-order crossovers.
 */
 #pragma once
 #include "filter_common.h"

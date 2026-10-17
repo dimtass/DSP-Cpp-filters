@@ -3,7 +3,8 @@
 * Dimitris Tassopoulos 2016-2020
 *
 * fc, corner frequency
-* Q, steepness of phase shift at fc (second-order only)
+* Q, first-edition width-like phase control used in tan(pi*Q/fs), in Hz.
+* This is not the conventional dimensionless Q or the later-edition fc/Q.
 */
 #pragma once
 #include "filter_common.h"

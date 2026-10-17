@@ -3,7 +3,8 @@
 * Dimitris Tassopoulos 2016-2020
 *
 * fc , corner frequency
-* Q , quality factor controlling width of peak or notch = 1/BW
+* Q, dimensionless width control; the tan() argument uses bandwidth fc/Q.
+* Supported domain: fc/Q < fs/2 (first edition, p.184).
 */
 #pragma once
 #include "filter_common.h"

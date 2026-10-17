@@ -1,9 +1,17 @@
 # set minimum cmake version
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+project(DSPCppFilters LANGUAGES CXX)
+
+# GoogleTest 1.14 requires C++14. Do not lower a caller-selected standard.
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 14)
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_UNIT_TESTS "Build the tests" ON)
 
-if (BUILD_UNIT_TESTS)    
+if (BUILD_UNIT_TESTS)
+    enable_testing()
     # Download and unpack googletest at configure time
     configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
     execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .

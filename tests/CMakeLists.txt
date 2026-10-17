@@ -97,7 +97,28 @@ add_executable(so_parametric_ncq_test so_parametric_ncq_test.cpp)
 target_link_libraries(so_parametric_ncq_test gtest_main)
 add_test(NAME so_parametric_ncq_test COMMAND so_parametric_ncq_test)
 
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
+# Source-derived multi-sample and response regressions in both precisions.
+foreach(precision default double float)
+    set(regression_target filter_regression_${precision}_test)
+    add_executable(${regression_target} filter_regression_test.cpp)
+    target_link_libraries(${regression_target} gtest_main)
+    set(order_target include_order_${precision}_test)
+    add_executable(${order_target} include_order_test.cpp
+                   include_order_common.cpp include_order_biquad.cpp)
+    target_link_libraries(${order_target} gtest_main)
+    if(precision STREQUAL "double")
+        target_compile_definitions(${regression_target} PRIVATE COEFF_SIZE_DOUBLE)
+        target_compile_definitions(${order_target} PRIVATE COEFF_SIZE_DOUBLE)
+    elseif(precision STREQUAL "float")
+        target_compile_definitions(${regression_target} PRIVATE COEFF_SIZE_FLOAT)
+        target_compile_definitions(${order_target} PRIVATE COEFF_SIZE_FLOAT)
+    endif()
+    add_test(NAME ${regression_target} COMMAND ${regression_target})
+    add_test(NAME ${order_target} COMMAND ${order_target})
+    list(APPEND regression_targets ${regression_target} ${order_target})
+endforeach()
+
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
                   DEPENDS
                   fo_apf_test fo_hpf_test fo_lpf_test
                   fo_shelving_high_test fo_shelving_low_test
@@ -107,4 +128,4 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
                   so_butterworth_hpf_test so_butterworth_lpf_test
                   so_linkwitz_riley_hpf_test so_linkwitz_riley_lpf_test
                   so_parametric_cq_boost_test so_parametric_cq_cut_test
-                  so_parametric_ncq_test)
+                  so_parametric_ncq_test ${regression_targets})

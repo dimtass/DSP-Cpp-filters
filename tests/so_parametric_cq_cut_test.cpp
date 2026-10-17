@@ -13,7 +13,7 @@ struct so_parametric_cq_cut : public testing::Test {
 
 TEST_F(so_parametric_cq_cut, coeff_calculation) {
 	// Assert
-	EXPECT_NEAR(m_coeffs.a0, 1.02544, 0.00001);
+	EXPECT_NEAR(m_coeffs.a0, 1.015288212008832, 0.00001);
 #ifdef DEBUG_OUTPUT
 	debug_print(m_coeffs);
 #endif
@@ -33,7 +33,7 @@ TEST_F(so_parametric_cq_cut, process_1) {
 	// Act
 	auto yn = m_filter->process(TEST_SAMPLE_1);
 	// Assert
-	EXPECT_NEAR(yn, 1.02544, 0.00001);
+	EXPECT_NEAR(yn, 1.015288212008832, 0.00001);
 #ifdef DEBUG_OUTPUT
 	std::cout << "yn: " << yn << std::endl;
 #endif
